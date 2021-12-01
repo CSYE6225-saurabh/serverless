@@ -14,4 +14,4 @@ zip -r $local_path index.js config.json
 pip3 install boto3==1.19.12
 
 # Run upload script
-python3 scripts/uploadFileToS3.py $bucket_name $aws_key $aws_access_key $aws_access_secret $local_path
+python3 scripts/upload.py $bucket_name $aws_key $aws_access_key $aws_access_secret $local_path
