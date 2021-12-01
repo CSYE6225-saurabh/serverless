@@ -18,8 +18,8 @@ exports.handler = (event, context, callback) => {
     function sendEmail() {
         var sender = "admin@prod.csye6225saurabh.me"
         
-        var to_address = JSON.parse(event.Records[0].Sns.Message).EmailAddress;
-        var accestokem = JSON.parse(event.Records[0].Sns.Message).AccessToken;
+        var to_address = JSON.parse(event.Records[0].Sns.Message).email;
+        var accesstoken = JSON.parse(event.Records[0].Sns.Message).token;
 
 
         return new Promise(function (resolve, reject) {
@@ -37,8 +37,8 @@ exports.handler = (event, context, callback) => {
                                 '</head><body>' +
                                 'This is the link to verify your account this link is valid for five minutes.' +
                                 '<br><br>' +
-                                "<a href=\"http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accestokem + "\">" +
-                                "http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accestokem + "</a>"
+                                "<a href=\"http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "\">" +
+                                "http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "</a>"
                                 +'</body></html>'
                         }
                     },
