@@ -12,23 +12,27 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Check
-      run: |
-        echo $(ls)
-    - name: Release to S3
-      run: bash scripts/build.sh ${{ secrets.AWS_Bucket_Name }} "webapp.zip" ${{ secrets.AWS_Access_Key }} ${{ secrets.AWS_Access_Secret }} "serverless.zip"
-    
-    - uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_Access_Key }}
-        aws-secret-access-key: ${{ secrets.AWS_Access_Secret }}
-        aws-region: us-east-1
+    - name: Build Deployment Artifact
+      run: | 
+        zip -r build_artifact .
 
+    - name: Configure AWS credentials from Test account
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{secrets.AWS_REGION}}
+
+    - name: Push artifact to s3
+      run: |
+        aws s3 sync ./codedeploy_artifact s3://${{secrets.CODEDEPLOY_BUCKET}}
+        echo ${{secrets.CODEDEPLOY_BUCKET}}
+    
     - name: Create CodeDeploy Deployment
       id: deploy
       run: |
         echo $(ls)
         aws lambda update-function-code \
               --function-name  lambda_function_name \
-              --zip-file fileb://serverless.zip \
+              --zip-file fileb://build_artifact.zip \
               --region us-east-1
