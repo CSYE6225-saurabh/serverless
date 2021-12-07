@@ -3,26 +3,26 @@ var ses = new AWS.SES({
     region: 'us-east-1'
 });
 
-exports.handler = (event, context, callback) => {
+const handleSNS = (event, context, callback) => {
     // console.log(event.Records[0].Sns);
     // var event_data = [JSON.parse(event).message];
     
-    console.log("SNS Data===========>"+JSON.stringify(event));
+    console.log("Data from Simple Notification Service"+JSON.stringify(event));
     
 
-    async function mainFunction() {
+    const mainFunction = async() => {
         sendEmail()
     }
     mainFunction();
 
-    function sendEmail() {
+    const sendEmail = () => {
         var sender = "admin@prod.csye6225saurabh.me"
         
         var to_address = JSON.parse(event.Records[0].Sns.Message).email;
         var accesstoken = JSON.parse(event.Records[0].Sns.Message).token;
 
 
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject)=> {
             var eParams = {
                 Destination: {
                     ToAddresses: [to_address]
@@ -33,9 +33,13 @@ exports.handler = (event, context, callback) => {
                             //Data: links
                             Data: '<html><head>' +
                                 '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' +
-                                '<title>' + "Verification Email" + '</title>' +
+                                '<title>' + "Email Verification for the User" + '</title>' +
                                 '</head><body>' +
-                                'This is the link to verify your account this link is valid for five minutes.' +
+                                `Hello User,`+
+                                '<br><br>' +
+                                `Your Email ID is ${to_address}. `+
+                                '<br><br>' +
+                                'Verify your account with the provided link. Note that the link is valid for 5 mins.' +
                                 '<br><br>' +
                                 "<a href=\"http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "\">" +
                                 "http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "</a>"
@@ -48,7 +52,7 @@ exports.handler = (event, context, callback) => {
                 },
                 Source: sender
             };
-            ses.sendEmail(eParams, function (err, data2) {
+            ses.sendEmail(eParams, (err, data2) => {
                 if (err) {
                     reject(new Error(err));
                 } else {
@@ -59,3 +63,5 @@ exports.handler = (event, context, callback) => {
         });
     }
 }
+
+module.export = handleSNS
