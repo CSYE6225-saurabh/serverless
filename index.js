@@ -3,7 +3,7 @@ var ses = new AWS.SES({
     region: 'us-east-1'
 });
 
-const handleSNS = (event, context, callback) => {
+exports.handleSNS = (event, context, callback) => {
     // console.log(event.Records[0].Sns);
     // var event_data = [JSON.parse(event).message];
     
@@ -63,5 +63,3 @@ const handleSNS = (event, context, callback) => {
         });
     }
 }
-
-module.export = handleSNS
