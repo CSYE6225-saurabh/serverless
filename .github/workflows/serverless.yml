@@ -13,11 +13,11 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build Deployment Artifact
-      run: 
-        mkdir codedeploy_artifact
-        zip -r build_artifact .
-        pwd
-        mv build_artifact.zip codedeploy_artifact
+      run: |
+        mkdir codedeploy_artifact &&
+        zip -r build_artifact . &&
+        pwd &&
+        mv build_artifact.zip codedeploy_artifact &&
         cd codedeploy_artifact
 
     - name: Configure AWS credentials from Test account
