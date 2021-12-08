@@ -13,8 +13,12 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build Deployment Artifact
-      run: | 
+      run: 
+        mkdir codedeploy_artifact
         zip -r build_artifact .
+        pwd
+        mv build_artifact.zip codedeploy_artifact
+        cd codedeploy_artifact
 
     - name: Configure AWS credentials from Test account
       uses: aws-actions/configure-aws-credentials@v1
@@ -25,7 +29,7 @@ jobs:
 
     - name: Push artifact to s3
       run: |
-        aws s3 sync ./build_artifact.zip s3://${{secrets.AWS_BUCKET_NAME}}
+        aws s3 sync ./codedeploy_artifact s3://${{secrets.AWS_BUCKET_NAME}}
         echo ${{secrets.AWS_BUCKET_NAME}}
     
     - name: Create CodeDeploy Deployment
@@ -34,5 +38,5 @@ jobs:
         echo $(ls)
         aws lambda update-function-code \
               --function-name  lambda_function_name \
-              --zip-file fileb://build_artifact.zip \
+              --zip-file fileb://codedeploy_artifact/build_artifact.zip \
               --region us-east-1
