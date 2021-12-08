@@ -3,7 +3,7 @@ var ses = new AWS.SES({
     region: 'us-east-1'
 });
 
-exports.handleSNS = (event, context, callback) => {
+exports.handler = (event, context, callback) => {
     // console.log(event.Records[0].Sns);
     // var event_data = [JSON.parse(event).message];
     
@@ -13,10 +13,10 @@ exports.handleSNS = (event, context, callback) => {
     const mainFunction = async() => {
         sendEmail()
     }
-    mainFunction();
+
 
     const sendEmail = () => {
-        var sender = "admin@prod.csye6225saurabh.me"
+        var sender = "saurabh@prod.csye6225saurabh.me"
         
         var to_address = JSON.parse(event.Records[0].Sns.Message).email;
         var accesstoken = JSON.parse(event.Records[0].Sns.Message).token;
@@ -41,8 +41,8 @@ exports.handleSNS = (event, context, callback) => {
                                 '<br><br>' +
                                 'Verify your account with the provided link. Note that the link is valid for 5 mins.' +
                                 '<br><br>' +
-                                "<a href=\"http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "\">" +
-                                "http://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "</a>"
+                                "<a href=\"https://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "\">" +
+                                "https://" + "prod.csye6225saurabh.me" + "/v1/verifyUserEmail?email=" + to_address + "&token=" + accesstoken + "</a>"
                                 +'</body></html>'
                         }
                     },
@@ -62,4 +62,5 @@ exports.handleSNS = (event, context, callback) => {
             });
         });
     }
+    mainFunction();
 }
