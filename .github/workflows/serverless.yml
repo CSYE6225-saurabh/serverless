@@ -19,14 +19,14 @@ jobs:
     - name: Configure AWS credentials from Test account
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
         aws-region: ${{secrets.AWS_REGION}}
 
     - name: Push artifact to s3
       run: |
-        aws s3 sync ./codedeploy_artifact s3://${{secrets.CODEDEPLOY_BUCKET}}
-        echo ${{secrets.CODEDEPLOY_BUCKET}}
+        aws s3 sync ./codedeploy_artifact s3://${{secrets.AWS_BUCKET_NAME}}
+        echo ${{secrets.AWS_BUCKET_NAME}}
     
     - name: Create CodeDeploy Deployment
       id: deploy
