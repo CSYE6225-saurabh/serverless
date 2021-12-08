@@ -25,7 +25,7 @@ jobs:
 
     - name: Push artifact to s3
       run: |
-        aws s3 sync build_artifact.zip s3://${{secrets.AWS_BUCKET_NAME}}
+        aws s3 sync ./build_artifact.zip s3://${{secrets.AWS_BUCKET_NAME}}
         echo ${{secrets.AWS_BUCKET_NAME}}
     
     - name: Create CodeDeploy Deployment
